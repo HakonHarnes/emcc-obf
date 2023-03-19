@@ -5,10 +5,10 @@ project.
 
 ## Usage
 
-A brief description of each flag can be found [here](https://github.com/HakonHarnes/emcc-obf/blob/main/docs/flags.md). Some of them are translated from 中國人 at the best of my ability, sorry!
+A brief description of each flag can be found [here](https://github.com/HakonHarnes/emcc-obf/blob/main/docs/flags.md). Some of them are translated from 中國人 to the best of my ability, sorry!
 The flags operate at the LLVM-level and have to be passed to Emscripten through the `-mllvm` flag. For instance, if you want to add bogus control flow and set the probability to 100% for each basic block, you would have to do:
 
-```
+```shell
 emcc -mllvm -enable-bcfobf -bcf_prob 100 <file>.c
 ```
 
@@ -16,16 +16,25 @@ To only obfuscate certain functions, see [Function Annotations](https://github.c
 
 ## Building
 
-### Docker
+Building LLVM from source can be a resource-intensive and time-consuming process, especially on slower or less powerful machines. Consider using the pre-built docker image in stead: 
+
+```shell
+docker run -it hawkis/emcc-obf:latest
+```
+
+### Building with Docker
 
 ```shell
 docker build -t emcc-obf .
 docker run -it emcc-obf
 ```
 
-You can now use `emcc`.
-
 ## Building locally
+
+Emscripten does not require compilation as it uses Python. However, the LLVM (which provides `Clang` and `wasm-ld`) and Binaryen components need to be compiled. Once compiled, you can simply modify the `.emscripten` file to specify the correct paths for these tools using the 
+`LLVM_ROOT` and `BINARYEN_ROOT` variables. This variables may already be correct depending on the output of `emcc --generate-config`. Also, for convenience the Emscripten folder should be added to your path.
+
+Note that `ninja install` installs the compiled binaries in the appropriate directories (usually `/usr/local/bin`), which may conflict with existing installations. If you've already installed LLVM and Binaryen, omit the `ninja install` command and edit the `.emscripten` file accordingly. 
 
 ### Dependencies
 
@@ -68,5 +77,3 @@ git clone https://github.com/emscripten-core/emscripten.git emscripten
 git checkout fab93a2bff6273c882b0c7fb7b54eccc37276e03
 emcc --generate-config
 ```
-
-Ensure `LLVM_ROOT` and `BINARYEN_ROOT` are correct in the `.emscripten` file. Also, for convenience the Emscripten folder should be added to your path.
