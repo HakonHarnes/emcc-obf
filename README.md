@@ -16,7 +16,7 @@ To only obfuscate certain functions, see [Function Annotations](https://github.c
 
 ## Building
 
-Building LLVM from source can be a resource-intensive and time-consuming process, especially on slower or less powerful machines. Consider using the pre-built docker image in stead: 
+Building LLVM from source can be a resource-intensive and time-consuming process, especially on slower or less powerful machines. Consider using the pre-built docker image instead: 
 
 ```shell
 docker run -it hawkis/emcc-obf:latest
