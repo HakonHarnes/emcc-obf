@@ -1,6 +1,6 @@
 # emcc-obf
 
-This repository contains a modified version of the Emscripten compiler that includes an LLVM-based obfuscator. Specifically, it uses the [Hikaru](https://github.com/61bcdefg/Hikari-LLVM15) obfuscator which is based on the [obfuscator-llvm](https://github.com/obfuscator-llvm/obfuscator)
+This repository contains a modified version of the Emscripten compiler that includes an LLVM-based obfuscator. Specifically, it uses the [Hikari](https://github.com/61bcdefg/Hikari-LLVM15) obfuscator which is based on the [obfuscator-llvm](https://github.com/obfuscator-llvm/obfuscator)
 project.
 
 ## Usage
