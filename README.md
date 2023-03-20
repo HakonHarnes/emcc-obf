@@ -36,7 +36,7 @@ Emscripten does not require compilation as it uses Python. However, the LLVM (wh
 
 Note that `ninja install` installs the compiled binaries in the appropriate directories (usually `/usr/local/bin`), which may conflict with existing installations. If you've already installed LLVM and Binaryen, omit the `ninja install` command and edit the `.emscripten` file accordingly. 
 
-### Dependencies
+#### Dependencies
 
 Building locally requires the following dependencies:
 
@@ -46,7 +46,7 @@ Building locally requires the following dependencies:
 - ninja
 - python3
 
-### Building LLVM
+#### Building LLVM
 
 ```shell
 git clone --recursive -b llvm-16.0.0rel https://github.com/61bcdefg/Hikari-LLVM15.git hikari
@@ -57,7 +57,7 @@ cmake -G "Ninja" -DCMAKE_BUILD_TYPE=MinSizeRel -DLLVM_APPEND_VC_REV=on -DLLVM_EN
 ninja && ninja install
 ```
 
-### Building Binaryen
+#### Building Binaryen
 
 ```shell
 git clone https://github.com/WebAssembly/binaryen.git binaryen
@@ -70,7 +70,7 @@ cmake -G "Ninja" ..
 ninja && ninja install
 ```
 
-### Configure emscripten
+#### Configure emscripten
 
 ```shell
 git clone https://github.com/emscripten-core/emscripten.git emscripten
