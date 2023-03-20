@@ -9,7 +9,7 @@ A brief description of each flag can be found [here](https://github.com/HakonHar
 The flags operate at the LLVM-level and have to be passed to Emscripten through the `-mllvm` flag. For instance, if you want to add bogus control flow and set the probability to 100% for each basic block, you would have to do:
 
 ```shell
-emcc -mllvm -enable-bcfobf -bcf_prob 100 <file>.c
+emcc -mllvm -enable-bcfobf -mllvm -bcf_prob 100 <file>.c
 ```
 
 To only obfuscate certain functions, see [Function Annotations](https://github.com/HikariObfuscator/Hikari/wiki/Functions-Annotations).
