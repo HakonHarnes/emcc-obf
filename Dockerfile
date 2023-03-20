@@ -47,8 +47,6 @@ RUN git checkout fab93a2bff6273c882b0c7fb7b54eccc37276e03
 
 ENV PATH="$PATH:/src/emscripten"
 
-ENV EMCC_SKIP_SANITY_CHECK=1
-
 RUN emcc --generate-config
 
 WORKDIR /
