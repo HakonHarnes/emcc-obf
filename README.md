@@ -29,7 +29,7 @@ docker build -t emcc-obf .
 docker run -it emcc-obf
 ```
 
-## Building locally
+### Building from source
 
 Emscripten does not require compilation as it uses Python. However, the LLVM (which provides `Clang` and `wasm-ld`) and Binaryen components need to be compiled. Once compiled, you can simply modify the `.emscripten` file to specify the correct paths for these tools using the 
 `LLVM_ROOT` and `BINARYEN_ROOT` variables. These variables may already be correct depending on the output of `emcc --generate-config`. Also, for convenience the Emscripten folder should be added to your path.
