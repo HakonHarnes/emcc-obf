@@ -5,7 +5,7 @@ project.
 
 ## Usage
 
-A brief description of each flag can be found [here](https://github.com/HakonHarnes/emcc-obf/blob/main/docs/flags.md). Some of them are translated from 中國人 to the best of my ability, sorry!
+A brief description of each flag can be found [here](https://github.com/HakonHarnes/emcc-obf/blob/main/docs/flags.md). Some of them are translated from 中文 to the best of my ability, sorry!
 The flags operate at the LLVM-level and have to be passed to Emscripten through the `-mllvm` flag. For instance, if you want to add bogus control flow and set the probability to 100% for each basic block, you would have to do:
 
 ```shell
