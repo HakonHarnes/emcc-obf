@@ -16,7 +16,7 @@ To only obfuscate certain functions, see [Function Annotations](https://github.c
 
 ## Building
 
-Building LLVM from source can be a resource-intensive and time-consuming process, especially on slower or less powerful machines. Consider using the pre-built docker image instead: 
+Building LLVM from source can be a resource-intensive and time-consuming process, especially on slower or less powerful machines. Consider using the pre-built docker image instead:
 
 ```shell
 docker run -it hawkis/emcc-obf:latest
@@ -31,19 +31,19 @@ docker run -it emcc-obf
 
 ### Building from source
 
-Emscripten does not require compilation as it uses Python. However, the LLVM (which provides `Clang` and `wasm-ld`) and Binaryen components need to be compiled. Once compiled, you can simply modify the `.emscripten` file to specify the correct paths for these tools using the 
+Emscripten does not require compilation as it uses Python. However, the LLVM (which provides `Clang` and `wasm-ld`) and Binaryen components need to be compiled. Once compiled, you can simply modify the `.emscripten` file to specify the correct paths for these tools using the
 `LLVM_ROOT` and `BINARYEN_ROOT` variables. These variables may already be correct depending on the output of `emcc --generate-config`. Also, for convenience the Emscripten folder should be added to your path.
 
-Note that `ninja install` installs the compiled binaries in the appropriate directories (usually `/usr/local/bin`), which may conflict with existing installations. If you've already installed LLVM and Binaryen, omit the `ninja install` command and edit the `.emscripten` file accordingly. 
+Note that `ninja install` installs the compiled binaries in the appropriate directories (usually `/usr/local/bin`), which may conflict with existing installations. If you've already installed LLVM and Binaryen, omit the `ninja install` command and edit the `.emscripten` file accordingly.
 
 #### Dependencies
 
 Building locally requires the following dependencies:
 
-- nodejs
 - gcc
 - cmake
 - ninja
+- nodejs
 - python3
 
 #### Building LLVM
@@ -76,4 +76,5 @@ ninja && ninja install
 git clone https://github.com/emscripten-core/emscripten.git emscripten
 git checkout fab93a2bff6273c882b0c7fb7b54eccc37276e03
 emcc --generate-config
+npm i
 ```

@@ -1,6 +1,6 @@
 FROM archlinux:base-devel-20230312.0.133040
 
-RUN pacman -Syyu vim git nodejs gcc cmake ninja python3 --noconfirm
+RUN pacman -Syyu vim git nodejs gcc cmake ninja python3 npm --noconfirm
 
 RUN mkdir -p src build/hikari build/binaryen
 
@@ -48,5 +48,7 @@ RUN git checkout fab93a2bff6273c882b0c7fb7b54eccc37276e03
 ENV PATH="$PATH:/src/emscripten"
 
 RUN emcc --generate-config
+
+RUN npm i
 
 WORKDIR /
