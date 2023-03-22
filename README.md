@@ -78,3 +78,7 @@ git checkout fab93a2bff6273c882b0c7fb7b54eccc37276e03
 emcc --generate-config
 npm i
 ```
+
+## License 
+
+See [Hikari/License](https://github.com/HikariObfuscator/Hikari/wiki/License).
