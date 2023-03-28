@@ -12,15 +12,9 @@ The flags operate at the LLVM-level and have to be passed to Emscripten through 
 emcc -mllvm -enable-bcfobf -mllvm -bcf_prob 100 <file>.c
 ```
 
-To only obfuscate certain functions, see [Function Annotations](https://github.com/HikariObfuscator/Hikari/wiki/Functions-Annotations).
+To only obfuscate certain functions, see [Function Annotations](https://github.com/HikariObfuscator/Hikari/wiki/Functions-Annotations). Turn off aggressive optimization so your obfuscation is not optimized away by the compiler.
 
 ## Building
-
-Building LLVM from source can be a resource-intensive and time-consuming process, especially on slower or less powerful machines. Consider using the pre-built docker image instead:
-
-```shell
-docker run -it hawkis/emcc-obf:latest
-```
 
 ### Building with Docker
 
@@ -79,6 +73,6 @@ emcc --generate-config
 npm i
 ```
 
-## License 
+## License
 
 See [Hikari/License](https://github.com/HikariObfuscator/Hikari/wiki/License).
