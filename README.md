@@ -1,18 +1,115 @@
 # emcc-obf
 
-This repository contains a modified version of the Emscripten compiler that includes an LLVM-based obfuscator. Specifically, it uses the [Hikari](https://github.com/61bcdefg/Hikari-LLVM15) obfuscator which is based on the [obfuscator-llvm](https://github.com/obfuscator-llvm/obfuscator)
-project.
+This repository contains a modified version of the Emscripten compiler that includes an LLVM-based obfuscator. Specifically, it uses the [Hikari](https://github.com/61bcdefg/Hikari-LLVM15) obfuscator which is based on the [obfuscator-llvm](https://github.com/obfuscator-llvm/obfuscator) project.
+
+**Disclaimer:** Some of the documentation is translated from 中文 to the best of my ability, sorry!
+
+## Table of Contents
+
+- [Usage](#usage)
+  - [Flags](#flags)
+  - [Environment Variables](#environment-variables)
+- [Building](#building)
+  - [Building with Docker](#building-with-docker)
+  - [Building from Source](#building-from-source)
+    - [Dependencies](#dependencies)
+    - [Building LLVM](#building-llvm)
+    - [Building Binaryen](#building-binaryen)
+    - [Configure Emscripten](#configure-emscripten)
+- [License](#license)
 
 ## Usage
 
-A brief description of each flag can be found [here](https://github.com/HakonHarnes/emcc-obf/blob/main/docs/flags.md). Some of them are translated from 中文 to the best of my ability, sorry!
 The flags operate at the LLVM-level and have to be passed to Emscripten through the `-mllvm` flag. For instance, if you want to add bogus control flow and set the probability to 100% for each basic block, you would have to do:
 
 ```shell
 emcc -mllvm -enable-bcfobf -mllvm -bcf_prob 100 <file>.c
 ```
 
-To only obfuscate certain functions, see [Function Annotations](https://github.com/HikariObfuscator/Hikari/wiki/Functions-Annotations). Turn off aggressive optimization so your obfuscation is not optimized away by the compiler.
+To only obfuscate certain functions, see [Function Annotations](https://github.com/HikariObfuscator/Hikari/wiki/Functions-Annotations).
+
+**Note:** You may need to turn off optimization so that the obfuscation is not optimized away by the compiler.
+
+### Flags
+
+| Flag                       | Description                                                                                      | Default  |
+| -------------------------- | ------------------------------------------------------------------------------------------------ | -------- |
+| **All obfuscation**        |                                                                                                  |          |
+| `enable-allobf`            | Enable all obfuscation passes.                                                                   | `false`  |
+| **AntiClassDump**          |                                                                                                  |          |
+| `enable-acdobf`            | Enable AntiClassDump pass.                                                                       | `false`  |
+| `acd-use-initialize`       | Inject codes to initialize.                                                                      | `true`   |
+| `acd-rename-methodimp`     | Rename methods imp.                                                                              | `false`  |
+| **AntiDebugging**          |                                                                                                  |          |
+| `enable-adb`               | Enable AntiDebugging pass.                                                                       | `false`  |
+| `adbextirpath`             | External path pointing to pre-compiled AntiDebugging IR.                                         | `""`     |
+| `adb_prob`                 | Probability (%) for each function to be obfuscated by AntiDebugging.                             | `40`     |
+| **AntiHooking**            |                                                                                                  |          |
+| `enable-antihook`          | Enable AntiHooking pass.                                                                         | `false`  |
+| `adhexrirpath`             | External path pointing to pre-compiled AntiHooking IR.                                           | `""`     |
+| `ah_inline`                | Check Inline Hook for AArch64.                                                                   | `true`   |
+| `ah_objcruntime`           | Check Objective-C Runtime Hook.                                                                  | `true`   |
+| `ah_antirebind`            | Make fishhook unavailable.                                                                       | `false`  |
+| **BogusControlFlow**       |                                                                                                  |          |
+| `enable-bcfobf`            | Enable BogusControlFlow pass.                                                                    | `false`  |
+| `bcf_prob`                 | Probability (%) for each basic block to be obfuscated by BogusControlFlow.                       | `70`     |
+| `bcf_loop`                 | How many times the BogusControlFlow pass is applied per basic block.                             | `1`      |
+| `bcf_cond_compl`           | The complexity of the expression used to generate branching condition.                           | `3`      |
+| `bcf_junkasm`              | Add junk assembly to each basic block.                                                           | `false`  |
+| `bcf_onlyjunkasm`          | Only add junk assembly to each basic block.                                                      | `false`  |
+| `bcf_junkasm_maxnum`       | The maximum number of junk assembly per basic block.                                             | `4`      |
+| `bcf_junkasm_minnum`       | The minimum number of junk assembly per basic block.                                             | `2`      |
+| `bcf_createfunc`           | Create function for each opaque predicate.                                                       | ``       |
+| **BasicBlockSplit**        |                                                                                                  |          |
+| `enable-splitobf`          | Enable BasicBlockSplit pass.                                                                     | `false`  |
+| `split_num`                | How many times the BasicBlockSplit pass is applied per basic block.                              | `2`      |
+| **ConstantEncryption**     |                                                                                                  |          |
+| `enable-constenc`          | Enable ConstantEncryption pass.                                                                  | `false`  |
+| `constenc_prob`            | Probability (%) that an instruction will be obfuscated by the ConstantEncryption pass.           | `50`     |
+| `constenc_times`           | How many times the ConstantEncryption pass is applied per function.                              | `1`      |
+| `constenc_subxor`          | Substitute xor operator of ConstantEncryption.                                                   | `false`  |
+| `constenc_togv`            | Replace ConstantInt with GlobalVariable.                                                         | `false`  |
+| **Flattening**             |                                                                                                  |          |
+| `enable-cffobf`            | Enable Flattening pass.                                                                          | `false`  |
+| **FunctionCallObfuscate**  |                                                                                                  |          |
+| `enable-fco`               | Enable FunctionCallObfuscate pass.                                                               | `false`  |
+| `fcoconfig`                | FunctionCallObfuscate configuration path.                                                        | `"+-x/"` |
+| `fco_flag`                 | The value of `RTLD_DEFAULT` on your platform.                                                    | `-1`     |
+| **FunctionWrapper**        |                                                                                                  |          |
+| `enable-funcwra`           | Enable FunctionWrapper pass.                                                                     | `false`  |
+| `fw_prob`                  | Probability (%) for each CallSite to be obfuscated by the FunctionWrapper pass.                  | `30`     |
+| `fw_times`                 | How many times the FunctionWrapper pass is applied per CallSite.                                 | `2`      |
+| **IndirectBranches**       |                                                                                                  |          |
+| `enable-indibran`          | Enable IndirectBranches pass.                                                                    | `false`  |
+| `indibran-use-stack`       | Enable stack-based indirect jumps.                                                               | `false`  |
+| `indibran-enc-jump-target` | Encrypt jump target.                                                                             | `false`  |
+| **Substitution**           |                                                                                                  |          |
+| `enable-subobf`            | Enable Substitution pass.                                                                        | `false`  |
+| `sub_prob`                 | Probability (%) that an instruction will be obfuscated by the Substitution pass.                 | `50`     |
+| `sub_loop`                 | How many times the Substitution pass is applied per function.                                    | `1`      |
+| **StringEncryption**       |                                                                                                  |          |
+| `enable-strcry`            | Enable StringEncryption pass.                                                                    | `false`  |
+| `strcry_prob`              | Probability (%) that the StringEncryption pass is applied per element of ConstantDataSequential. | `100`    |
+| **Seed**                   |                                                                                                  |          |
+| `aesSeed`                  | Seed for the PRNG.                                                                               | `0x1337` |
+
+### Environment variables
+
+| Environment Variable | Description                        |
+| -------------------- | ---------------------------------- |
+| `ALLOBF`             | Enable all obfuscation passes.     |
+| `ACDOBF`             | Enable AntiClassDump pass.         |
+| `ADB`                | Enable AntiDebugging pass.         |
+| `ANTIHOOK`           | Enable AntiHooking pass.           |
+| `BCFOBF`             | Enable BogusControlFlow pass.      |
+| `SPLITOBF`           | Enable BasicBlockSplit pass.       |
+| `CONSTENC`           | Enable ConstantEncryption pass.    |
+| `CFFOBF`             | Enable Flattening pass.            |
+| `FCO`                | Enable FunctionCallObfuscate pass. |
+| `FUNCWRA`            | Enable FunctionWrapper pass.       |
+| `INDIBRAN`           | Enable IndirectBranches pass.      |
+| `SUBOBF`             | Enable Substitution pass.          |
+| `STRCRY`             | Enable StringEncryption pass.      |
 
 ## Building
 
