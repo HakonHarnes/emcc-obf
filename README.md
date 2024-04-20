@@ -1,5 +1,16 @@
 # emcc-obf
 
+```php
+                                                              /##        /###### 
+                                                             | ##       /##__  ##
+  /######  /######/####   /#######  /#######         /###### | ####### | ##  \__/
+ /##__  ##| ##_  ##_  ## /##_____/ /##_____//###### /##__  ##| ##__  ##| ####    
+| ########| ## \ ## \ ##| ##      | ##     |______/| ##  \ ##| ##  \ ##| ##_/    
+| ##_____/| ## | ## | ##| ##      | ##             | ##  | ##| ##  | ##| ##      
+|  #######| ## | ## | ##|  #######|  #######       |  ######/| #######/| ##      
+ \_______/|__/ |__/ |__/ \_______/ \_______/        \______/ |_______/ |__/      
+```
+
 This repository contains a modified version of the Emscripten compiler that includes an LLVM-based obfuscator. Specifically, it uses the [Hikari](https://github.com/61bcdefg/Hikari-LLVM15) obfuscator which is based on the [obfuscator-llvm](https://github.com/obfuscator-llvm/obfuscator) project.
 
 **Disclaimer:** Some of the documentation is translated from 中文 to the best of my ability, sorry!
